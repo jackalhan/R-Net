@@ -10,7 +10,9 @@ home = os.path.expanduser("~")
 train_file = os.path.join(home, "data", "squad", "train-v1.1.json")
 dev_file = os.path.join(home, "data", "squad", "dev-v1.1.json")
 test_file = os.path.join(home, "data", "squad", "dev-v1.1.json")
-glove_word_file = os.path.join(home, "data", "glove", "glove.840B.300d.txt")
+#glove_word_file = os.path.join(home, "data", "glove", "glove.840B.300d.txt")
+glove_word_file = os.path.join(home, "data", "elmo", "elmo_embeddings_512.txt")
+
 
 target_dir = "data"
 log_dir = "log/event"
@@ -61,8 +63,8 @@ flags.DEFINE_string("answer_file", answer_file, "Out file for answer")
 
 
 flags.DEFINE_integer("glove_char_size", 94, "Corpus size for Glove")
-flags.DEFINE_integer("glove_word_size", int(2.2e6), "Corpus size for Glove")
-flags.DEFINE_integer("glove_dim", 300, "Embedding dimension for Glove")
+flags.DEFINE_integer("glove_word_size", int(99506), "Corpus size for Glove")
+flags.DEFINE_integer("glove_dim", 512, "Embedding dimension for Glove")
 flags.DEFINE_integer("char_dim", 8, "Embedding dimension for char")
 
 flags.DEFINE_integer("para_limit", 400, "Limit length for paragraph")
@@ -79,7 +81,7 @@ flags.DEFINE_boolean("use_cudnn", True, "Whether to use cudnn rnn (should be Fal
 flags.DEFINE_boolean("is_bucket", False, "build bucket batch iterator or not")
 flags.DEFINE_integer("bucket_range", [40, 401, 40], "the range of bucket")
 
-flags.DEFINE_integer("batch_size", 64, "Batch size")
+flags.DEFINE_integer("batch_size", 8, "Batch size")
 flags.DEFINE_integer("num_steps", 60000, "Number of steps")
 flags.DEFINE_integer("checkpoint", 1000, "checkpoint to save and evaluate the model")
 flags.DEFINE_integer("period", 100, "period to save batch loss")
