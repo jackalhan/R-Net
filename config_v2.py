@@ -1,8 +1,8 @@
 import os
 import tensorflow as tf
 
-from prepro import prepro
-from main import train, test
+from prepro_v2 import prepro
+from main_v2 import train, test
 
 flags = tf.flags
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
@@ -10,7 +10,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 home = os.path.expanduser("~")
 train_file = os.path.join(home, "data", "squad", "train-v1.1.json")
 dev_file = os.path.join(home, "data", "squad", "dev-v1.1.json")
-test_file = os.path.join(home, "data", "squad", "train-v1.1.json")
+test_file = os.path.join(home, "data", "squad", "dev-v1.1.json")
 glove_word_file = os.path.join(home, "data", "glove", "glove.840B.300d.txt")
 
 target_dir = "data"
@@ -40,7 +40,7 @@ if not os.path.exists(save_dir):
 if not os.path.exists(answer_dir):
     os.makedirs(answer_dir)
 
-flags.DEFINE_string("mode", "test", "train/debug/test")
+flags.DEFINE_string("mode", "train", "train/debug/test")
 
 flags.DEFINE_string("target_dir", target_dir, "")
 flags.DEFINE_string("log_dir", log_dir, "")
@@ -85,12 +85,12 @@ flags.DEFINE_boolean("use_cudnn", True, "Whether to use cudnn (only for GPU)")
 flags.DEFINE_boolean("is_bucket", False, "Whether to use bucketing")
 flags.DEFINE_list("bucket_range", [40, 361, 40], "range of bucket")
 
-flags.DEFINE_integer("batch_size", 128, "Batch size")
+flags.DEFINE_integer("batch_size", 8, "Batch size")
 flags.DEFINE_integer("num_steps", 60000, "Number of steps")
 flags.DEFINE_integer("checkpoint", 1000, "checkpoint for evaluation")
 flags.DEFINE_integer("period", 100, "period to save batch loss")
 flags.DEFINE_integer("val_num_batches", 150, "Num of batches for evaluation")
-flags.DEFINE_float("init_lr", 0.001, "Initial lr for Adadelta")
+flags.DEFINE_float("init_lr", 0.5, "Initial lr for Adadelta")
 flags.DEFINE_float("keep_prob", 0.7, "Keep prob in rnn")
 flags.DEFINE_float("ptr_keep_prob", 0.7, "Keep prob for pointer network")
 flags.DEFINE_float("grad_clip", 5.0, "Global Norm gradient clipping rate")

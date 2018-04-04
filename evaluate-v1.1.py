@@ -79,9 +79,13 @@ if __name__ == '__main__':
     expected_version = '1.1'
     parser = argparse.ArgumentParser(
         description='Evaluation for SQuAD ' + expected_version)
-    parser.add_argument('dataset_file', help='Dataset file')
-    parser.add_argument('prediction_file', help='Prediction File')
+    parser.add_argument('dataset_file', nargs='?', help='Dataset file')
+    parser.add_argument('prediction_file', nargs= '?', help='Prediction File')
     args = parser.parse_args()
+    if args.dataset_file is None:
+        args.dataset_file = '/home/jackalhan/data/squad/train-v1.1.json'
+    if args.prediction_file is None:
+        args.prediction_file = '/home/jackalhan/data/squad/train_answer.json'
     with open(args.dataset_file) as dataset_file:
         dataset_json = json.load(dataset_file)
         if (dataset_json['version'] != expected_version):

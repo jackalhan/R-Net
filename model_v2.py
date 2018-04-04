@@ -3,12 +3,13 @@ from func import cudnn_gru, native_gru, dot_attention, summ, dropout, ptr_net
 
 
 class Model(object):
-    def __init__(self, config, batch, word_mat=None, char_mat=None, trainable=True, opt=True):
+    def __init__(self, config, batch_ques, batch_par, word_mat=None, char_mat=None, trainable=True, opt=True):
 
         self.config = config
         self.global_step = tf.get_variable('global_step', shape=[], dtype=tf.int32,
                                            initializer=tf.constant_initializer(0), trainable=False)
-        self.c, self.q, self.ch, self.qh, self.y1, self.y2, self.qa_id = batch.get_next()
+        self.q, self.qh, self.y1, self.y2, self.qa_id = batch_ques.get_next()
+        self.c, self.ch = batch_par.get_next()
         self.is_train = tf.get_variable(
             "is_train", shape=[], dtype=tf.bool, trainable=False)
         self.word_mat = tf.get_variable("word_mat", initializer=tf.constant(
@@ -48,9 +49,6 @@ class Model(object):
                 "lr", shape=[], dtype=tf.float32, trainable=False)
             self.opt = tf.train.AdadeltaOptimizer(
                 learning_rate=self.lr, epsilon=1e-6)
-            # self.opt = tf.train.AdamOptimizer(
-            #     learning_rate=self.lr, epsilon=1e-6)
-
             grads = self.opt.compute_gradients(self.loss)
             gradients, variables = zip(*grads)
             capped_grads, _ = tf.clip_by_global_norm(
